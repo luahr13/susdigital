@@ -8,6 +8,5 @@
         public string SenhaHash { get; set; }
         public DateTime CriadoEm { get; set; }
         public DateTime? UltimoLoginEm { get; set; }
-        public UserRole Papel { get; set; }
     }
 }
