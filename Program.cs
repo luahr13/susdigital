@@ -5,7 +5,7 @@ using projetoTP3_A2.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // --------------------------------------------------------
-// CONFIGURAÇÃO DO BANCO DE DADOS SQL SERVER
+// CONFIGURAï¿½ï¿½O DO BANCO DE DADOS SQL SERVER
 // --------------------------------------------------------
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -20,7 +20,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 // --------------------------------------------------------
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = false; // deixe true se quiser confirmação por e-mail
+    options.SignIn.RequireConfirmedAccount = false; // deixe true se quiser confirmaï¿½ï¿½o por e-mail
 })
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -35,7 +35,7 @@ builder.Services.AddRazorPages();
 var app = builder.Build();
 
 // --------------------------------------------------------
-// PIPELINE DE REQUISIÇÃO
+// PIPELINE DE REQUISIï¿½ï¿½O
 // --------------------------------------------------------
 if (app.Environment.IsDevelopment())
 {
@@ -63,7 +63,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}"
 );
 
-// Razor Pages (necessário para Identity)
+// Razor Pages (necessï¿½rio para Identity)
 app.MapRazorPages();
 
 app.Run();
