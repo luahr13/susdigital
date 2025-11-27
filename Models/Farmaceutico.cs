@@ -2,7 +2,7 @@
 
 namespace projetoTP3_A2.Models
 {
-    public class Farmaceutico : Usuario
+    public class Farmaceutico : ApplicationUser
     {
         public string RegistroProfissional { get; set; }   
         public string IdFarmacia { get; set; }

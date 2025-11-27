@@ -5,12 +5,13 @@ using projetoTP3_A2.Models;
 
 namespace projetoTP3_A2.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
-        public DbSet<projetoTP3_A2.Models.Farmacia> Farmacia { get; set; } = default!;
+
+        public DbSet<Farmacia> Farmacia { get; set; } = default!;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace projetoTP3_A2.Models
 {
-    public class Paciente : Usuario
+    public class Paciente : ApplicationUser
     {
         public Guid Id { get; set; }
         public string Nome { get; set; }

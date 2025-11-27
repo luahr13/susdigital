@@ -2,7 +2,7 @@
 
 namespace projetoTP3_A2.Models
 {
-    public class Medico : Usuario
+    public class Medico : ApplicationUser
     {
         public string CRM { get; set; }
         public string Especialidade { get; set; }
