@@ -81,7 +81,7 @@ namespace projetoTP3_A2.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("Usuário logado com sucesso.");
-                    return LocalRedirect(returnUrl);
+                    return LocalRedirect("~/Home/Index"); // redireciona para a Home
                 }
                 if (result.RequiresTwoFactor)
                 {
