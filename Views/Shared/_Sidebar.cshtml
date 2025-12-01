@@ -1,0 +1,60 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using projetoTP3_A2.Models
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    var user = await UserManager.GetUserAsync(User);
+    var roles = await UserManager.GetRolesAsync(user);
+}
+<style>
+    .sidebar {
+        position: fixed;
+        top: 70px; /* altura da navbar */
+        left: 0;
+        width: 220px;
+        height: calc(100vh - 70px);
+        background-color: #E7FDFB;
+        padding-top: 20px;
+        border-right: 1px solid #dee2e6;
+        overflow-y: auto;
+        z-index: 1000;
+    }
+
+        .sidebar .nav-link {
+            color: #273240;
+            font-weight: 500;
+            padding: 10px 20px;
+            display: block;
+            transition: background-color 0.2s ease;
+        }
+
+            .sidebar .nav-link:hover {
+                background-color: #d0f5f2;
+                border-radius: 4px;
+            }
+</style>
+<div class="sidebar p-3">
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Home" asp-action="Index">🏠 Dashboard</a>
+        </li>
+
+        @if (roles.Contains("Administrador") || roles.Contains("Medico"))
+        {
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Medicos" asp-action="Index">🩺 Médicos</a>
+            </li>
+        }
+
+        @if (roles.Contains("Administrador") || roles.Contains("Farmaceutico"))
+        {
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Farmacia" asp-action="Index">💊 Farmácia</a>
+            </li>
+        }
+
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Pacientes" asp-action="Index">👥 Pacientes</a>
+        </li>
+    </ul>
+</div>
