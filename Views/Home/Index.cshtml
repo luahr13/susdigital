@@ -2,38 +2,43 @@
     ViewData["Title"] = "Página Inicial";
     Layout = "_Layout"; // usa o layout padrão com navbar e rodapé
 }
+<div clarr="row">
+    <!-- Coluna do menu lateral -->
+    <div class="col-md-2">
+        <partial name="_Sidebar" />
+    </div>
+    <div class="container mt-4">
+        <h1 class="text-primary">Bem-vindo, @User.Identity.Name!</h1>
+        <p class="lead">Você está logado no sistema de saúde.</p>
 
-<div class="container mt-4">
-    <h1 class="text-primary">Bem-vindo, @User.Identity.Name!</h1>
-    <p class="lead">Você está logado no sistema de saúde.</p>
-
-    <div class="row mt-4">
-        <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Farmácia</h5>
-                    <p class="card-text">Gerencie os medicamentos e estoques.</p>
-                    <a asp-controller="Farmacia" asp-action="Index" class="btn btn-success">Acessar</a>
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Farmácia</h5>
+                        <p class="card-text">Gerencie os medicamentos e estoques.</p>
+                        <a asp-controller="Farmacia" asp-action="Index" class="btn btn-success">Acessar</a>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Médicos</h5>
-                    <p class="card-text">Visualize e gerencie os médicos cadastrados.</p>
-                    <a asp-controller="Medico" asp-action="Index" class="btn btn-info">Acessar</a>
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Médicos</h5>
+                        <p class="card-text">Visualize e gerencie os médicos cadastrados.</p>
+                        <a asp-controller="Medico" asp-action="Index" class="btn btn-info">Acessar</a>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Pacientes</h5>
-                    <p class="card-text">Gerencie os pacientes e seus prontuários.</p>
-                    <a asp-controller="Paciente" asp-action="Index" class="btn btn-warning">Acessar</a>
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Pacientes</h5>
+                        <p class="card-text">Gerencie os pacientes e seus prontuários.</p>
+                        <a asp-controller="Paciente" asp-action="Index" class="btn btn-warning">Acessar</a>
+                    </div>
                 </div>
             </div>
         </div>
