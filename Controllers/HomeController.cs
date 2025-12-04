@@ -20,5 +20,19 @@ namespace projetoTP3_A2.Controllers
             ViewData["Title"] = "Área do Farmacêutico";
             return View(); // procura Views/Home/FarmaceuticoHome.cshtml
         }
+
+        [Authorize(Policy = "MedicoPolicy")]
+        public IActionResult MedicoHome()
+        {
+            ViewData["Title"] = "Área do Médico";
+            return View(); // procura Views/Home/MedicoHome.cshtml
+        }
+
+        [Authorize(Policy = "PacientePolicy")]
+        public IActionResult PacienteHome()
+        {
+            ViewData["Title"] = "Área do Paciente";
+            return View(); // procura Views/Home/PacienteHome.cshtml
+        }
     }
 }

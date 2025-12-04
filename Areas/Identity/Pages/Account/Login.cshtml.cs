@@ -100,13 +100,13 @@ namespace projetoTP3_A2.Areas.Identity.Pages.Account
                             return LocalRedirect("~/Home/Index");
 
                         case Perfis.Medico:
-                            return LocalRedirect("~/MedicoHome/Index");
+                            return LocalRedirect("~/Home/MedicoHome");
 
                         case Perfis.Farmaceutico:
                             return LocalRedirect("~/Home/FarmaceuticoHome");
 
                         case Perfis.Paciente:
-                            return LocalRedirect("~/PacienteHome/Index");
+                            return LocalRedirect("~/Home/PacienteHome");
 
                         default:
                             return LocalRedirect(returnUrl);
