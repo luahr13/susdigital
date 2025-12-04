@@ -45,9 +45,9 @@
         @if (roles.Contains("Administrador") || roles.Contains("Medico"))
         {
             <li class="nav-item">
-                <a class="nav-link d-flex align-items-center" asp-controller="Medicos" asp-action="Index">
-                    <img src="~/images/icons/doctor_svg.svg" alt="Farmácia" class="sidebar-icon" />
-                    <span>Médicos</span>
+                <a class="nav-link d-flex align-items-center" asp-controller="Medico" asp-action="Pacientes">
+                    <img src="~/images/icons/patient_svg.svg" alt="Pacientes" class="sidebar-icon" />
+                    <span>Pacientes</span>
                 </a>
             </li>
         }

@@ -103,7 +103,13 @@ async Task CreateRoles(IServiceProvider serviceProvider)
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+
+    // Cria as roles
     await CreateRoles(services);
+
+    // Cria os pacientes
+    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+    await SeedPacientes.SeedAsync(userManager);
 }
 
 // --------------------------------------------------------
