@@ -13,5 +13,19 @@ namespace projetoTP3_A2.Data
         }
 
         public DbSet<Farmacia> Farmacia { get; set; } = default!;
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            // Exemplo de configuração adicional (se quiser)
+            builder.Entity<Farmacia>(entity =>
+            {
+                entity.ToTable("Farmacia"); // força plural no nome da tabela
+                entity.HasKey(f => f.Id);
+                entity.Property(f => f.Nome).IsRequired().HasMaxLength(150);
+                entity.Property(f => f.Endereco).HasMaxLength(250);
+            });
+        }
     }
 }

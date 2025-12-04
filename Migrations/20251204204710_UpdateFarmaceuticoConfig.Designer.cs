@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using projetoTP3_A2.Data;
 
@@ -11,9 +12,11 @@ using projetoTP3_A2.Data;
 namespace projetoTP3_A2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251204204710_UpdateFarmaceuticoConfig")]
+    partial class UpdateFarmaceuticoConfig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -173,6 +176,11 @@ namespace projetoTP3_A2.Migrations
                     b.Property<DateTime>("CriadoEm")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -234,6 +242,10 @@ namespace projetoTP3_A2.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator().HasValue("ApplicationUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("projetoTP3_A2.Models.Farmacia", b =>
@@ -255,6 +267,25 @@ namespace projetoTP3_A2.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Farmacia", (string)null);
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.Farmaceutico", b =>
+                {
+                    b.HasBaseType("projetoTP3_A2.Models.ApplicationUser");
+
+                    b.Property<string>("IdFarmacia")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Papel")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RegistroProfissional")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasDiscriminator().HasValue("Farmaceutico");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

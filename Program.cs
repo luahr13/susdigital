@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using projetoTP3_A2.Data;
 using projetoTP3_A2.Models;
+using projetoTP3_A2.Models.Enum; // importa o enum Perfis
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,11 +28,27 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // --------------------------------------------------------
-// MVC + CONTROLLERS + VIEWS
+// AUTORIZAÇÃO COM POLICIES POR PERFIL
+// --------------------------------------------------------
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdministradorPolicy", policy =>
+        policy.RequireClaim("Perfil", Perfis.Administrador.ToString()));
+
+    options.AddPolicy("MedicoPolicy", policy =>
+        policy.RequireClaim("Perfil", Perfis.Medico.ToString()));
+
+    options.AddPolicy("FarmaceuticoPolicy", policy =>
+        policy.RequireClaim("Perfil", Perfis.Farmaceutico.ToString()));
+
+    options.AddPolicy("PacientePolicy", policy =>
+        policy.RequireClaim("Perfil", Perfis.Paciente.ToString()));
+});
+
+// --------------------------------------------------------
+// MVC + CONTROLLERS + VIEWS + RAZOR PAGES
 // --------------------------------------------------------
 builder.Services.AddControllersWithViews();
-
-// Razor Pages (mantido para login/registro do Identity)
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
@@ -89,7 +106,9 @@ using (var scope = app.Services.CreateScope())
     await CreateRoles(services);
 }
 
-// Razor Pages (necessário para Identity)
+// --------------------------------------------------------
+// RAZOR PAGES (necessário para Identity)
+// --------------------------------------------------------
 app.MapRazorPages();
 
 app.Run();

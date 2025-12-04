@@ -2,18 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using projetoTP3_A2.Models; // Importa sua classe ApplicationUser
+using projetoTP3_A2.Models.Enum; // importa o enum Perfis
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace projetoTP3_A2.Areas.Identity.Pages.Account
 {
@@ -81,7 +83,34 @@ namespace projetoTP3_A2.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("Usuário logado com sucesso.");
-                    return LocalRedirect("~/Home/Index"); // redireciona para a Home
+
+                    var user = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
+
+                    // Adiciona claim de Perfil
+                    var claims = new List<Claim>
+    {
+        new Claim("Perfil", user.Perfil.ToString())
+    };
+                    await _signInManager.SignInWithClaimsAsync(user, Input.RememberMe, claims);
+
+                    // Redireciona conforme o perfil
+                    switch (user.Perfil)
+                    {
+                        case Perfis.Administrador:
+                            return LocalRedirect("~/Home/Index");
+
+                        case Perfis.Medico:
+                            return LocalRedirect("~/MedicoHome/Index");
+
+                        case Perfis.Farmaceutico:
+                            return LocalRedirect("~/Home/FarmaceuticoHome");
+
+                        case Perfis.Paciente:
+                            return LocalRedirect("~/PacienteHome/Index");
+
+                        default:
+                            return LocalRedirect(returnUrl);
+                    }
                 }
                 if (result.RequiresTwoFactor)
                 {
