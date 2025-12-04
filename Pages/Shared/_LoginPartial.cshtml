@@ -13,11 +13,13 @@
 @if (SignInManager.IsSignedIn(User))
 {
     var user = await UserManager.GetUserAsync(User);
+    var perfil = user.Perfil.ToString(); // pega o enum Perfis
+    var nome = user.Nome; // ou UserName, se preferir
 
     <ul class="navbar-nav">
         <li class="nav-item">
             <a class="nav-link text-user" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                Olá, @user.Nome
+                Olá, @perfil @nome
             </a>
         </li>
         <li class="nav-item">
