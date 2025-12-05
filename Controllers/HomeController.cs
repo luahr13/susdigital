@@ -6,21 +6,31 @@ namespace projetoTP3_A2.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-
+        //ADM
         [Authorize(Policy = "AdministradorPolicy")]
         public IActionResult Index()
         {
-            ViewData["Title"] = "Página Inicial"; // garante que não será null
+            ViewData["Title"] = "Área do Administrador";
             return View();
         }
 
+        //ADM
         [Authorize(Policy = "AdministradorPolicy")]
         public IActionResult MedicamentoHome()
         {
-            ViewData["Title"] = "Área do médico"; // garante que não será null
+            ViewData["Title"] = "Área do Administrador";
             return View();
         }
 
+        //ADM
+        [Authorize(Policy = "AdministradorPolicy")]
+        public IActionResult AlergiaHome()
+        {
+            ViewData["Title"] = "Área do Administrador";
+            return View(); // procura Views/Home/PacienteHome.cshtml
+        }
+
+        //Farmaceutico
         [Authorize(Policy = "FarmaceuticoPolicy")]
         public IActionResult FarmaceuticoHome()
         {
@@ -28,6 +38,7 @@ namespace projetoTP3_A2.Controllers
             return View(); // procura Views/Home/FarmaceuticoHome.cshtml
         }
 
+        //Medico
         [Authorize(Policy = "MedicoPolicy")]
         public IActionResult MedicoHome()
         {
@@ -35,12 +46,12 @@ namespace projetoTP3_A2.Controllers
             return View(); // procura Views/Home/MedicoHome.cshtml
         }
 
+        //Paciente
         [Authorize(Policy = "PacientePolicy")]
         public IActionResult PacienteHome()
         {
             ViewData["Title"] = "Área do Paciente";
             return View(); // procura Views/Home/PacienteHome.cshtml
         }
-
     }
 }

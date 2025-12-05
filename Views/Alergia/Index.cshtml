@@ -1,4 +1,4 @@
-﻿@model IEnumerable<projetoTP3_A2.Models.Patologia>
+﻿@model IEnumerable<projetoTP3_A2.Models.Alergia>
 
 @{
     ViewData["Title"] = "Área do Administrador";
@@ -23,7 +23,7 @@
                     @Html.DisplayNameFor(model => model.Nome)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Descricao)
+                    @Html.DisplayNameFor(model => model.Reacao)
                 </th>
                 <th></th>
             </tr>
@@ -36,7 +36,7 @@
                         @Html.DisplayFor(modelItem => item.Nome)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Descricao)
+                        @Html.DisplayFor(modelItem => item.Reacao)
                     </td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
