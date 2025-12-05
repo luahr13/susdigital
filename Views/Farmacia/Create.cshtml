@@ -2,45 +2,54 @@
 
 @{
     ViewData["Title"] = "Nova Farmácia";
+    Layout = "_Layout";
 }
 
 <div class="container-fluid">
-    <!-- Coluna do menu lateral -->
-    <div class="col-md-2">
-        <partial name="_Sidebar" />
-    </div>
+    <div class="row">
 
-    <!-- Coluna do conteúdo principal -->
-    <div class="col-md-10">
-        <h2 class="text-success mb-4">➕ Nova Farmácia</h2>
+        <!-- Sidebar -->
+        <div class="col-md-2">
+            <partial name="_Sidebar" />
+        </div>
 
-        <div class="card shadow-sm border-0">
-            <div class="card-body">
-                <form asp-action="Create">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <!-- Conteúdo principal -->
+        <div class="col-md-10">
+            <h2 class="mb-4" style="color:#14A091;">Nova Farmácia</h2>
 
-                    <div class="mb-3">
-                        <label asp-for="Nome" class="form-label">🏥 Nome</label>
-                        <input asp-for="Nome" class="form-control" />
-                        <span asp-validation-for="Nome" class="text-danger"></span>
-                    </div>
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                    <div class="mb-3">
-                        <label asp-for="Endereco" class="form-label">📍 Endereço</label>
-                        <input asp-for="Endereco" class="form-control" />
-                        <span asp-validation-for="Endereco" class="text-danger"></span>
-                    </div>
+                        <!-- Nome -->
+                        <div class="mb-3">
+                            <label asp-for="Nome" class="form-label">Nome da Farmácia</label>
+                            <input asp-for="Nome" class="form-control" />
+                            <span asp-validation-for="Nome" class="text-danger"></span>
+                        </div>
 
-                    <div class="d-flex justify-content-between">
-                        <a asp-action="Index" class="btn btn-outline-secondary">
-                            ⬅️ Voltar
-                        </a>
-                        <button type="submit" class="btn btn-success">
-                            💾 Salvar
-                        </button>
-                    </div>
-                </form>
+                        <!-- Endereço -->
+                        <div class="mb-3">
+                            <label asp-for="Endereco" class="form-label">Endereço</label>
+                            <input asp-for="Endereco" class="form-control" />
+                            <span asp-validation-for="Endereco" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                Voltar
+                            </a>
+
+                            <button type="submit" class="btn" style="background-color:#14A091;color:white;">
+                                Salvar
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
             </div>
+
         </div>
     </div>
 </div>

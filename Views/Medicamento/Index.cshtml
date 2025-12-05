@@ -7,37 +7,46 @@
 }
 
 <style>
+    .titulo-verde {
+        color: #14A091;
+        font-weight: 600;
+    }
+
+        .titulo-verde:hover {
+            color: #0F6E63;
+        }
+
     .btn-edit {
-        background-color: #cfe2ff;
-        color: #0d6efd;
+        background-color: #A7CFFF;
+        color: #0A3F7F;
         border: none;
     }
 
         .btn-edit:hover {
-            background-color: #b6d4fe;
-            color: #0a58ca;
+            background-color: #8AB2F0;
+            color: #06306A;
         }
 
     .btn-details {
-        background-color: #cff4fc;
-        color: #0dcaf0;
+        background-color: #7FDAD1;
+        color: #0F6E63;
         border: none;
     }
 
         .btn-details:hover {
-            background-color: #b6effb;
-            color: #0aa2c0;
+            background-color: #5FCCBF;
+            color: #0B504D;
         }
 
     .btn-delete {
-        background-color: #f8d7da;
-        color: #dc3545;
+        background-color: #F5A6A5;
+        color: #A93A39;
         border: none;
     }
 
         .btn-delete:hover {
-            background-color: #f1b0b7;
-            color: #bb2d3b;
+            background-color: #E98C8B;
+            color: #7C2928;
         }
 
     .btn-novo-medicamento {
@@ -52,25 +61,32 @@
         }
 
     .table-custom thead tr th {
-        background-color: #D0F5F2 !important;
-        color: #14A091 !important;
+        background-color: #A7E8DF !important;
+        color: #0F6E63 !important;
+        text-align: center;
+        vertical-align: middle;
     }
 
     .table-custom tbody tr td {
-        background-color: #E7FDFB !important;
-        color: #14A091 !important;
+        background-color: #F9F9F9 !important;
+        color: #333 !important;
+        vertical-align: middle;
     }
 
     .table-custom tbody tr:hover td {
-        background-color: #C4ECE9 !important;
-        color: #14A091 !important;
+        background-color: #E0F2F1 !important;
+    }
+
+    .btn-sm {
+        border-radius: 0.3rem;
+    }
+
+    td.d-flex.gap-1 {
+        justify-content: center;
     }
 </style>
 
-
 <div class="container-fluid">
-    <div class="row">
-
         <!-- Sidebar -->
         <div class="col-md-2">
             <partial name="_Sidebar" />
@@ -78,7 +94,7 @@
 
         <!-- Conteúdo principal -->
         <div class="col-md-10">
-            <h2 class="mb-4" style="color: #14A091;">Medicamentos Cadastrados</h2>
+            <h2 class="mb-4 titulo-verde">Medicamentos Cadastrados</h2>
 
             <div class="d-flex justify-content-end mb-3">
                 <a asp-action="Create" class="btn btn-sm btn-novo-medicamento">
@@ -86,41 +102,38 @@
                 </a>
             </div>
 
-            <table class="table table-hover border rounded shadow-sm table-custom">
-                <thead>
-                    <tr>
-                        <th>@Html.DisplayNameFor(model => model.First().Nome)</th>
-                        <th>@Html.DisplayNameFor(model => model.First().Dosagem)</th>
-                        <th>@Html.DisplayNameFor(model => model.First().Tipo)</th>
-                        <th>@Html.DisplayNameFor(model => model.First().Frequencia)</th>
-                        <th>@Html.DisplayNameFor(model => model.First().Observacoes)</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    @foreach (var item in Model)
-                    {
+            <div class="table-responsive">
+                <table class="table table-hover border rounded shadow-sm table-custom text-center">
+                    <thead>
                         <tr>
-                            <td>@item.Nome</td>
-                            <td>@item.Dosagem</td>
-
-                            <!-- ENUM APLICADO -->
-                            <td>@item.Tipo.ToString()</td>
-
-                            <td>@item.Frequencia</td>
-                            <td>@item.Observacoes</td>
-
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-edit me-1">Editar</a>
-                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-details me-1">Detalhes</a>
-                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-delete">Excluir</a>
-                            </td>
+                            <th>@Html.DisplayNameFor(model => model.First().Nome)</th>
+                            <th>@Html.DisplayNameFor(model => model.First().Dosagem)</th>
+                            <th>@Html.DisplayNameFor(model => model.First().Tipo)</th>
+                            <th>@Html.DisplayNameFor(model => model.First().Frequencia)</th>
+                            <th>@Html.DisplayNameFor(model => model.First().Observacoes)</th>
+                            <th style="width: 220px;">Ações</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                    </thead>
 
-    </div>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Nome</td>
+                                <td>@item.Dosagem</td>
+                                <td>@item.Tipo.ToString()</td>
+                                <td>@item.Frequencia</td>
+                                <td>@item.Observacoes</td>
+                                <td class="d-flex gap-1 justify-content-center">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-edit">Editar</a>
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-details">Detalhes</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-delete">Excluir</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
 </div>
+

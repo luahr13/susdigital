@@ -1,56 +1,52 @@
 ﻿@model projetoTP3_A2.Models.Medicamento
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalhes do Medicamento";
+    Layout = "_Layout";
 }
 
-<h1>Detalhes</h1>
+<div class="container-fluid">
+    <div class="row">
 
-<div>
-    <h4>Medicamento</h4>
-    <hr />
-    <dl class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2">
+            <partial name="_Sidebar" />
+        </div>
 
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Nome)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Nome)
-        </dd>
+        <!-- Conteúdo principal -->
+        <div class="col-md-10">
+            <h2 class="mb-4" style="color:#14A091;">Detalhes do Medicamento</h2>
 
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Dosagem)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Dosagem)
-        </dd>
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <dl class="row">
 
-        <!-- Tipo (Enum exibido corretamente) -->
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Tipo)
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Tipo.ToString()
-        </dd>
+                        <dt class="col-sm-3 text-muted">Nome</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
 
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Frequencia)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Frequencia)
-        </dd>
+                        <dt class="col-sm-3 text-muted">Dosagem</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Dosagem)</dd>
 
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Observacoes)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Observacoes)
-        </dd>
+                        <dt class="col-sm-3 text-muted">Tipo</dt>
+                        <dd class="col-sm-9">@Model.Tipo.ToString()</dd>
 
-    </dl>
-</div>
+                        <dt class="col-sm-3 text-muted">Frequência</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Frequencia)</dd>
 
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Editar</a> |
-    <a asp-action="Index">Voltar</a>
+                        <dt class="col-sm-3 text-muted">Observações</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Observacoes)</dd>
+
+                    </dl>
+
+                    <div class="mt-4 d-flex justify-content-between">
+                        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn"
+                           style="background-color:#14A091;color:white;">Editar</a>
+
+                        <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>

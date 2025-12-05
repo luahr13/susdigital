@@ -2,74 +2,79 @@
 @using projetoTP3_A2.Models.Enum
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Medicamento";
+    Layout = "_Layout";
 }
 
-<h1>Edit</h1>
+<div class="container-fluid">
+    <div class="row">
 
-<h4>Medicamento</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <!-- Sidebar -->
+        <div class="col-md-2">
+            <partial name="_Sidebar" />
+        </div>
 
-            <input type="hidden" asp-for="Id" />
+        <!-- Conteúdo principal -->
+        <div class="col-md-10">
+            <h2 class="mb-4" style="color:#14A091;">Editar Medicamento</h2>
 
-            <!-- Nome -->
-            <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <input type="hidden" asp-for="Id" />
+
+                        <!-- Nome -->
+                        <div class="mb-3">
+                            <label asp-for="Nome" class="form-label">Nome do Medicamento</label>
+                            <input asp-for="Nome" class="form-control" />
+                            <span asp-validation-for="Nome" class="text-danger"></span>
+                        </div>
+
+                        <!-- Dosagem -->
+                        <div class="mb-3">
+                            <label asp-for="Dosagem" class="form-label">Dosagem</label>
+                            <input asp-for="Dosagem" class="form-control" />
+                            <span asp-validation-for="Dosagem" class="text-danger"></span>
+                        </div>
+
+                        <!-- Tipo (ENUM) -->
+                        <div class="mb-3">
+                            <label asp-for="Tipo" class="form-label">Tipo</label>
+                            <select asp-for="Tipo" class="form-control"
+                                    asp-items="Html.GetEnumSelectList<TipoMedicamento>()">
+                            </select>
+                            <span asp-validation-for="Tipo" class="text-danger"></span>
+                        </div>
+
+                        <!-- Frequência -->
+                        <div class="mb-3">
+                            <label asp-for="Frequencia" class="form-label">Frequência</label>
+                            <input asp-for="Frequencia" class="form-control" />
+                            <span asp-validation-for="Frequencia" class="text-danger"></span>
+                        </div>
+
+                        <!-- Observações -->
+                        <div class="mb-3">
+                            <label asp-for="Observacoes" class="form-label">Observações</label>
+                            <textarea asp-for="Observacoes" class="form-control"></textarea>
+                            <span asp-validation-for="Observacoes" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-3">
+                            <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+                            <button type="submit" class="btn" style="background-color:#14A091;color:white;">Salvar</button>
+                        </div>
+
+                    </form>
+                </div>
             </div>
-
-            <!-- Dosagem -->
-            <div class="form-group">
-                <label asp-for="Dosagem" class="control-label"></label>
-                <input asp-for="Dosagem" class="form-control" />
-                <span asp-validation-for="Dosagem" class="text-danger"></span>
-            </div>
-
-            <!-- Tipo (ENUM aplicado) -->
-            <div class="form-group">
-                <label asp-for="Tipo" class="control-label"></label>
-
-                <select asp-for="Tipo" class="form-control"
-                        asp-items="Html.GetEnumSelectList<TipoMedicamento>()">
-                    <option value="">Selecione...</option>
-                </select>
-
-                <span asp-validation-for="Tipo" class="text-danger"></span>
-            </div>
-
-            <!-- Frequência -->
-            <div class="form-group">
-                <label asp-for="Frequencia" class="control-label"></label>
-                <input asp-for="Frequencia" class="form-control" />
-                <span asp-validation-for="Frequencia" class="text-danger"></span>
-            </div>
-
-            <!-- Observações -->
-            <div class="form-group">
-                <label asp-for="Observacoes" class="control-label"></label>
-                <input asp-for="Observacoes" class="form-control" />
-                <span asp-validation-for="Observacoes" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mt-3">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @Html.Partial("_ValidationScriptsPartial")
 }
+
