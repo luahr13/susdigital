@@ -7,6 +7,8 @@ namespace projetoTP3_A2.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
+        internal object Medicamentos;
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -27,5 +29,6 @@ namespace projetoTP3_A2.Data
                 entity.Property(f => f.Endereco).HasMaxLength(250);
             });
         }
+        public DbSet<projetoTP3_A2.Models.Medicamento> Medicamento { get; set; } = default!;
     }
 }

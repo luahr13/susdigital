@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using projetoTP3_A2.Data;
 
@@ -11,9 +12,11 @@ using projetoTP3_A2.Data;
 namespace projetoTP3_A2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251205011225_AddMedicamentosTables")]
+    partial class AddMedicamentosTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -265,6 +268,9 @@ namespace projetoTP3_A2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("AtivarLembrete")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Dosagem")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -272,6 +278,9 @@ namespace projetoTP3_A2.Migrations
                     b.Property<string>("Frequencia")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeSpan?>("HorarioLembrete")
+                        .HasColumnType("time");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -281,8 +290,9 @@ namespace projetoTP3_A2.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Tipo")
-                        .HasColumnType("int");
+                    b.Property<string>("Tipo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

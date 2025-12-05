@@ -10,31 +10,41 @@ namespace projetoTP3_A2.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Discriminator",
-                table: "AspNetUsers",
-                type: "nvarchar(21)",
-                maxLength: 21,
-                nullable: false,
-                defaultValue: "");
+           // Discriminator
+            migrationBuilder.Sql(@"
+IF EXISTS (SELECT 1 FROM sys.columns 
+           WHERE Name = N'Discriminator' AND Object_ID = Object_ID(N'AspNetUsers'))
+BEGIN
+    ALTER TABLE AspNetUsers DROP COLUMN Discriminator;
+END
+");
 
-            migrationBuilder.AddColumn<string>(
-                name: "IdFarmacia",
-                table: "AspNetUsers",
-                type: "nvarchar(max)",
-                nullable: true);
+            // IdFarmacia
+            migrationBuilder.Sql(@"
+IF EXISTS (SELECT 1 FROM sys.columns 
+           WHERE Name = N'IdFarmacia' AND Object_ID = Object_ID(N'AspNetUsers'))
+BEGIN
+    ALTER TABLE AspNetUsers DROP COLUMN IdFarmacia;
+END
+");
 
-            migrationBuilder.AddColumn<int>(
-                name: "Papel",
-                table: "AspNetUsers",
-                type: "int",
-                nullable: true);
+            // Papel
+            migrationBuilder.Sql(@"
+IF EXISTS (SELECT 1 FROM sys.columns 
+           WHERE Name = N'Papel' AND Object_ID = Object_ID(N'AspNetUsers'))
+BEGIN
+    ALTER TABLE AspNetUsers DROP COLUMN Papel;
+END
+");
 
-            migrationBuilder.AddColumn<string>(
-                name: "RegistroProfissional",
-                table: "AspNetUsers",
-                type: "nvarchar(max)",
-                nullable: true);
+            // RegistroProfissional
+            migrationBuilder.Sql(@"
+IF EXISTS (SELECT 1 FROM sys.columns 
+           WHERE Name = N'RegistroProfissional' AND Object_ID = Object_ID(N'AspNetUsers'))
+BEGIN
+    ALTER TABLE AspNetUsers DROP COLUMN RegistroProfissional;
+END
+");
         }
 
         /// <inheritdoc />
