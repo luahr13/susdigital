@@ -6,6 +6,5 @@ namespace projetoTP3_A2.Models
     {
         public string CRM { get; set; }
         public string Especialidade { get; set; }
-        public Perfis Papel { get; set; }
     }
 }

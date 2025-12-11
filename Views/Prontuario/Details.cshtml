@@ -1,0 +1,331 @@
+﻿@using projetoTP3_A2.Models.Enum
+@model projetoTP3_A2.Models.Prontuario
+
+@{
+    ViewData["Title"] = "Detalhes do Prontuário";
+    Layout = "_Layout";
+}
+
+<style>
+    .btn-create {
+        background-color: #14A091;
+        color: #fff;
+        border: none;
+    }
+
+        .btn-create:hover {
+            background-color: #118072;
+            color: #fff;
+        }
+
+    .table-custom thead th {
+        background-color: #D0F5F2 !important;
+        color: #14A091 !important;
+        border-bottom: 2px solid #14A091;
+    }
+
+    .table-custom tbody td {
+        background-color: #E7FDFB !important;
+        color: #273240 !important;
+        vertical-align: middle;
+    }
+
+    .table-custom tbody tr:hover td {
+        background-color: #C4ECE9 !important;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <h2 class="mb-4 text-uppercase fw-bold" style="color:#14A091;">
+                @ViewData["Title"]
+            </h2>
+
+            @if (TempData["Erro"] != null)
+            {
+                <div id="erroModal" class="modal fade" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-warning">
+                                <h5 class="modal-title">Aviso</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>@TempData["Erro"]</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!-- Informações principais -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header" style="background-color:#D0F5F2; color:#14A091;">
+                    Informações do Prontuário
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-2 fw-bold">Paciente</dt>
+                        <dd class="col-sm-10">@Model.Paciente?.Nome (@Model.Paciente?.Email)</dd>
+
+                        <dt class="col-sm-2 fw-bold">Médico</dt>
+                        <dd class="col-sm-10">@Model.Medico?.Nome (@Model.Medico?.Email)</dd>
+
+                        <dt class="col-sm-2 fw-bold">Criado em</dt>
+                        <dd class="col-sm-10">@Model.CriadoEm.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                        <dt class="col-sm-2 fw-bold">Observações</dt>
+                        <dd class="col-sm-10">@Model.Observacoes</dd>
+
+                        <dt class="col-sm-2 fw-bold">Status</dt>
+                        <dd class="col-sm-10">@Model.Status</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <!-- Medicamentos -->
+            @if (Model.Medicamentos != null && Model.Medicamentos.Any())
+            {
+                <h4 style="color:#14A091;">Medicamentos</h4>
+                <div class="table-responsive shadow-sm rounded mb-4">
+                    <table class="table table-hover table-custom">
+                        <thead>
+                            <tr>
+                                <th>Medicamento</th>
+                                <th>Dosagem</th>
+                                <th>Frequência</th>
+                                <th>Observações</th>
+                                <th>Código Prescrição</th>
+                                <th>Status</th>
+                                <th>Data da Baixa</th>
+                                <th>Farmacêutico</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var med in Model.Medicamentos)
+                            {
+                                <tr>
+                                    <td>@med.Medicamento?.Nome</td>
+                                    <td>@med.Dosagem</td>
+                                    <td>@med.Frequencia</td>
+                                    <td>@med.Observacoes</td>
+                                    <td>
+                                        <span class="badge bg-info">@med.CodigoPrescricao</span>
+                                    </td>
+                                    <td>
+                                        @if (med.Status == PrescricaoStatus.Pendente)
+                                        {
+                                            <span class="badge bg-warning">Pendente</span>
+                                        }
+                                        else if (med.Status == PrescricaoStatus.Liquidado)
+                                        {
+                                            <span class="badge bg-success">Liquidado</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">Cancelado</span>
+                                        }
+                                    </td>
+                                    <td>@med.DataBaixa?.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td>@med.Farmaceutico?.UserName</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            <!-- Arquivos -->
+            @if (Model.Arquivos != null && Model.Arquivos.Any())
+            {
+                <h4 style="color:#14A091;">Arquivos</h4>
+                <ul class="list-group mb-4">
+                    @foreach (var arq in Model.Arquivos)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="~/@arq.Caminho" target="_blank">@arq.NomeArquivo</a>
+                            <span class="text-muted">(enviado em @arq.UploadEm.ToString("dd/MM/yyyy HH:mm"))</span>
+                        </li>
+                    }
+                </ul>
+            }
+
+            <!-- Exames -->
+            @if (Model.Exames != null && Model.Exames.Any())
+            {
+                <h4 style="color:#14A091;">Exames</h4>
+                <div class="table-responsive shadow-sm rounded mb-4">
+                    <table class="table table-hover table-custom">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Observações</th>
+                                <th>Status</th>
+                                <th>Solicitado</th>
+                                <th>Concluído</th>
+                                <th>Validado</th>
+                                <th>Arquivos</th>
+                                <th>Motivo da negação</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var exame in Model.Exames)
+                            {
+                                <tr>
+                                    <td>@exame.Nome</td>
+                                    <td>@exame.Observacoes</td>
+                                    <td>
+                                        @if (exame.Status == ExameStatus.Pendente)
+                                        {
+                                            <span class="badge bg-warning text-dark">Solicitado</span>
+                                        }
+                                        else if (exame.Status == ExameStatus.Realizado)
+                                        {
+                                            <span class="badge bg-info text-dark">Realizado</span>
+                                        }
+                                        else if (exame.Status == ExameStatus.Disponivel)
+                                        {
+                                            <span class="badge bg-success">Validado</span>
+                                        }
+                                        else if (exame.Status == ExameStatus.Negado)
+                                        {
+                                            <span class="badge bg-danger">Negado</span>
+                                        }
+                                    </td>
+                                    <td>@exame.SolicitadoEm.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td>@(exame.ConcluidoEm.HasValue? exame.ConcluidoEm.Value.ToString("dd/MM/yyyy HH:mm") : "—")</td>
+                                    <td>@(exame.ValidadoEm.HasValue? exame.ValidadoEm.Value.ToString("dd/MM/yyyy HH:mm") : "—")</td>
+                                    <td>
+                                        @if (exame.Arquivos != null && exame.Arquivos.Any())
+                                        {
+                                            <ul class="list-unstyled">
+                                                @foreach (var arq in exame.Arquivos)
+                                                {
+                                                    <li>
+                                                        <a href="~/@arq.Caminho" target="_blank">@arq.NomeArquivo</a>
+                                                        <span class="text-muted">(enviado em @arq.UploadEm.ToString("dd/MM/yyyy HH:mm"))</span>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Nenhum arquivo enviado</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(exame.ObservacaoNegacao))
+                                        {
+                                            <span class="text-danger">@exame.ObservacaoNegacao</span>
+                                        }
+                                        else
+                                        {
+                                            <span>—</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (User.IsInRole("Paciente") && exame.Status == ExameStatus.Pendente)
+                                        {
+                                            <form asp-action="UploadExame" asp-route-id="@exame.Id" enctype="multipart/form-data" method="post">
+                                                <input type="file" name="arquivosExame" multiple class="form-control" />
+                                                <button type="submit" class="btn btn-create btn-sm mt-2">Enviar Exame</button>
+                                            </form>
+                                        }
+                                        @if (User.IsInRole("Medico"))
+                                        {
+                                            <a asp-action="EditarExame" asp-route-id="@exame.Id" class="btn btn-primary btn-sm">Editar</a>
+                                            <a asp-action="RemoverExame" asp-route-id="@exame.Id" class="btn btn-danger btn-sm">Remover</a>
+                                            @if (exame.Status == ExameStatus.Realizado)
+                                            {
+                                                <form asp-action="AprovarExame" asp-route-id="@exame.Id" method="post" style="display:inline;">
+                                                    <button type="submit" class="btn btn-success btn-sm">Aprovar</button>
+                                                </form>
+
+                                                <form asp-action="NegarExame" asp-route-id="@exame.Id" method="post" style="display:inline;">
+                                                    <input type="text" name="observacaoNegacao"
+                                                           placeholder="Motivo da negação"
+                                                           class="form-control form-control-sm d-inline-block"
+                                                           style="width:200px;" required />
+                                                    <button type="submit" class="btn btn-warning btn-sm">Negar</button>
+                                                </form>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            <!-- Botão para adicionar exame (médico) -->
+            @if (User.IsInRole("Medico") && Model.Status != ProntuarioStatus.Fechado)
+            {
+                <button type="button" id="btn-revelar-form" class="btn btn-outline-primary mt-3">Adicionar Exame</button>
+
+                <div id="form-exame" style="display:none;" class="card card-body bg-light mt-3">
+                    <form asp-action="AdicionarExame" method="post">
+                        <input type="hidden" name="ProntuarioId" value="@Model.Id" />
+
+                        <div class="mb-3">
+                            <label for="Nome" class="form-label fw-bold">Nome do exame</label>
+                            <input type="text" name="Nome" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Observacoes" class="form-label fw-bold">Observações</label>
+                            <textarea name="Observacoes" class="form-control"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-create">Criar</button>
+                    </form>
+                </div>
+            }
+
+            <!-- Botões finais -->
+            <div class="mt-4">
+                @if (User.IsInRole("Medico"))
+                {
+                    @if (Model.Status != ProntuarioStatus.Fechado)
+                    {
+                        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Editar</a>
+
+                        <form asp-action="FecharProntuario" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <button type="submit" class="btn btn-danger">Fechar Prontuário</button>
+                        </form>
+                    }
+
+                    <a asp-action="IndexMedico" class="btn btn-secondary">Voltar</a>
+                }
+                else if (User.IsInRole("Paciente"))
+                {
+                    <a asp-action="IndexPaciente" class="btn btn-secondary">Voltar</a>
+                }
+            </div>
+             
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Revela o formulário de adicionar exame (médico)
+        document.getElementById("btn-revelar-form")?.addEventListener("click", function () {
+            document.getElementById("form-exame").style.display = "block";
+            this.style.display = "none";
+        });
+
+        // Se existir o modal de erro, abre automaticamente
+        var erroModal = document.getElementById('erroModal');
+        if (erroModal) {
+            var modal = new bootstrap.Modal(erroModal);
+            modal.show();
+        }
+    </script>
+}

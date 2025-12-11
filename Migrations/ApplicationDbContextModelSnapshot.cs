@@ -185,11 +185,17 @@ namespace projetoTP3_A2.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("CPF")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CriadoEm")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataNascimento")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -253,6 +259,107 @@ namespace projetoTP3_A2.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<int>("Perfil").HasValue(1);
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.ArquivoExame", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Caminho")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ExameId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("NomeArquivo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Tipo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UploadEm")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExameId");
+
+                    b.ToTable("ArquivosExame");
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.ArquivoProntuario", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Caminho")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NomeArquivo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProntuarioId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("UploadEm")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProntuarioId");
+
+                    b.ToTable("ArquivoProntuario");
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.Exame", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ConcluidoEm")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ObservacaoNegacao")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Observacoes")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProntuarioId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("SolicitadoEm")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ValidadoEm")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProntuarioId");
+
+                    b.ToTable("Exames");
                 });
 
             modelBuilder.Entity("projetoTP3_A2.Models.Farmacia", b =>
@@ -263,17 +370,17 @@ namespace projetoTP3_A2.Migrations
 
                     b.Property<string>("Endereco")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Farmacia", (string)null);
+                    b.ToTable("Farmacia");
                 });
 
             modelBuilder.Entity("projetoTP3_A2.Models.Medicamento", b =>
@@ -308,6 +415,56 @@ namespace projetoTP3_A2.Migrations
                     b.ToTable("Medicamento");
                 });
 
+            modelBuilder.Entity("projetoTP3_A2.Models.MedicamentoProntuario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CodigoPrescricao")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DataBaixa")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Dosagem")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("FarmaceuticoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Frequencia")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MedicamentoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Observacoes")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProntuarioId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FarmaceuticoId");
+
+                    b.HasIndex("MedicamentoId");
+
+                    b.HasIndex("ProntuarioId");
+
+                    b.ToTable("MedicamentoProntuario");
+                });
+
             modelBuilder.Entity("projetoTP3_A2.Models.Patologia", b =>
                 {
                     b.Property<Guid>("Id")
@@ -325,6 +482,80 @@ namespace projetoTP3_A2.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Patologia");
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.Prontuario", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CriadoEm")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("MedicoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Observacoes")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PacienteId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MedicoId");
+
+                    b.HasIndex("PacienteId");
+
+                    b.ToTable("Prontuario");
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.Farmaceutico", b =>
+                {
+                    b.HasBaseType("projetoTP3_A2.Models.ApplicationUser");
+
+                    b.Property<string>("AreaAtuacao")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CRF")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue(3);
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.Medico", b =>
+                {
+                    b.HasBaseType("projetoTP3_A2.Models.ApplicationUser");
+
+                    b.Property<string>("CRM")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Especialidade")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue(2);
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.Paciente", b =>
+                {
+                    b.HasBaseType("projetoTP3_A2.Models.ApplicationUser");
+
+                    b.Property<int>("Raca")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Sexo")
+                        .HasColumnType("int");
+
+                    b.HasDiscriminator().HasValue(4);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -376,6 +607,98 @@ namespace projetoTP3_A2.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.ArquivoExame", b =>
+                {
+                    b.HasOne("projetoTP3_A2.Models.Exame", "Exame")
+                        .WithMany("Arquivos")
+                        .HasForeignKey("ExameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exame");
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.ArquivoProntuario", b =>
+                {
+                    b.HasOne("projetoTP3_A2.Models.Prontuario", "Prontuario")
+                        .WithMany("Arquivos")
+                        .HasForeignKey("ProntuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Prontuario");
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.Exame", b =>
+                {
+                    b.HasOne("projetoTP3_A2.Models.Prontuario", "Prontuario")
+                        .WithMany("Exames")
+                        .HasForeignKey("ProntuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Prontuario");
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.MedicamentoProntuario", b =>
+                {
+                    b.HasOne("projetoTP3_A2.Models.Farmaceutico", "Farmaceutico")
+                        .WithMany()
+                        .HasForeignKey("FarmaceuticoId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("projetoTP3_A2.Models.Medicamento", "Medicamento")
+                        .WithMany()
+                        .HasForeignKey("MedicamentoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("projetoTP3_A2.Models.Prontuario", "Prontuario")
+                        .WithMany("Medicamentos")
+                        .HasForeignKey("ProntuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Farmaceutico");
+
+                    b.Navigation("Medicamento");
+
+                    b.Navigation("Prontuario");
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.Prontuario", b =>
+                {
+                    b.HasOne("projetoTP3_A2.Models.Medico", "Medico")
+                        .WithMany()
+                        .HasForeignKey("MedicoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("projetoTP3_A2.Models.Paciente", "Paciente")
+                        .WithMany()
+                        .HasForeignKey("PacienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Medico");
+
+                    b.Navigation("Paciente");
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.Exame", b =>
+                {
+                    b.Navigation("Arquivos");
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.Prontuario", b =>
+                {
+                    b.Navigation("Arquivos");
+
+                    b.Navigation("Exames");
+
+                    b.Navigation("Medicamentos");
                 });
 #pragma warning restore 612, 618
         }

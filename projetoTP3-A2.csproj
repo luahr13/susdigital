@@ -20,6 +20,7 @@
   <ItemGroup>
     <Folder Include="Migrations\" />
     <Folder Include="wwwroot\images\icons\" />
+    <Folder Include="wwwroot\uploads\exames\" />
   </ItemGroup>
 
 </Project>

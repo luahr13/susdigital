@@ -1,4 +1,5 @@
 ﻿@using System.Security.Claims
+
 @{
     string perfil = User.FindFirst("Perfil")?.Value;
     string logoController = "Home";
@@ -10,42 +11,74 @@
             logoController = "Home";
             logoAction = "Index";
             break;
-
         case "Medico":
             logoController = "Home";
             logoAction = "MedicoHome";
             break;
-
         case "Farmaceutico":
             logoController = "Home";
             logoAction = "FarmaceuticoHome";
             break;
-
         case "Paciente":
             logoController = "Home";
             logoAction = "PacienteHome";
             break;
-
         case "Medicamentos":
-            logoController = "Home"; 
-            logoAction = "MedicamentoHome";           
+            logoController = "Home";
+            logoAction = "MedicamentoHome";
             break;
     }
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - projetoTP3_A2</title>
-    <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/projetoTP3_A2.styles.css" asp-append-version="true" />
 </head>
 <body>
     <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-area {
+            flex: 1;
+            display: flex;
+        }
+
+        .sidebar-bg {
+            background-color: #E7FDFB;
+            border-right: 1px solid #d0f5f2;
+            width: 220px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 1rem;
+        }
+
+        footer {
+            background-color: #f8f9fa;
+            color: #6c757d;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 0.9rem;
+        }
+
         .custom-navbar {
             background-color: #E7FDFB !important;
         }
@@ -53,48 +86,61 @@
             .custom-navbar .nav-link,
             .custom-navbar .navbar-brand,
             .custom-navbar .navbar-toggler-icon {
-                color: #273240 !important; /* mesma cor dos textos/ícones do sidebar */
+                color: #273240 !important;
             }
     </style>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 custom-navbar">
-            <div class="container">
-                <a class="navbar-brand" asp-controller="@logoController" asp-action="@logoAction">
-                    <img src="~/images/logo.png" alt="Logo" style="height:40px;" />
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                        aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex">
-                    <ul class="navbar-nav me-auto">
-                        <!-- Links adicionais podem ser adicionados aqui -->
-                    </ul>
 
-                    <div class="ms-auto">
-                        <partial name="_LoginPartial" />
+    <div class="wrapper">
+        <!-- Navbar -->
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-light border-bottom shadow-sm custom-navbar">
+                <div class="container-fluid">
+                    <a class="navbar-brand d-flex align-items-center" asp-controller="@logoController" asp-action="@logoAction">
+                        <img src="~/images/logo.png" alt="Logo" style="height:40px;" class="me-2" />
+                        <span class="fw-bold text-dark"></span>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                            aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarContent">
+                        <ul class="navbar-nav me-auto">
+                            <!-- Links adicionais podem ser adicionados aqui -->
+                        </ul>
+                        <div class="ms-auto">
+                            <partial name="_LoginPartial" />
+                        </div>
                     </div>
                 </div>
+            </nav>
+        </header>
+
+        <!-- Sidebar + Conteúdo -->
+        <div class="content-area">
+            <!-- Sidebar -->
+            <div class="sidebar-bg">
+                @Html.Partial("_Sidebar")
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+
+            <!-- Conteúdo principal -->
+            <div class="main-content">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="border-top footer text-muted mt-auto py-3">
+            <div class="container">
+                &copy; 2025 - projetoTP3_A2 - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            </div>
+        </footer>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - projetoTP3_A2 - <a asp-area="" asp-page="/Privacy">Privacy</a>
-        </div>
-    </footer>
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <!-- Scripts -->
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

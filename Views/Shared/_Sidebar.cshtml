@@ -6,88 +6,77 @@
     var user = await UserManager.GetUserAsync(User);
     var roles = await UserManager.GetRolesAsync(user);
 }
-<style>
-    .sidebar {
-        position: fixed;
-        top: 70px; /* altura da navbar */
-        left: 0;
-        width: 220px;
-        height: calc(100vh - 70px);
-        background-color: #E7FDFB;
-        padding-top: 20px;
-        border-right: 1px solid #dee2e6;
-        overflow-y: auto;
-        z-index: 1000;
-    }
 
-        .sidebar .nav-link {
-            color: #273240;
-            font-weight: 500;
-            padding: 10px 20px;
-            display: block;
-            transition: background-color 0.2s ease;
-        }
-
-            .sidebar .nav-link:hover {
-                background-color: #d0f5f2;
-                border-radius: 4px;
-            }
-
-    .sidebar-icon {
-        height: 1em; /* altura igual ao tamanho da fonte */
-        width: auto; /* mantém proporção */
-        margin-right: 8px; /* espaço entre ícone e texto */
-        vertical-align: middle; /* alinha com o texto */
-    }
-</style>
-<div class="sidebar p-3">
-    <ul class="nav flex-column">
-        @if (roles.Contains("Administrador") || roles.Contains("Medico"))
+<div class="d-flex flex-column flex-shrink-0 p-3 border-end h-100"
+     style="width: 220px; background-color: #E7FDFB;">
+    <ul class="nav nav-pills flex-column mb-auto">
+        @if (roles.Contains("Medico"))
         {
             <li class="nav-item">
                 <a class="nav-link d-flex align-items-center" asp-controller="Medico" asp-action="Pacientes">
-                    <img src="~/images/icons/patient_svg.svg" alt="Pacientes" class="sidebar-icon" />
-                    <span>Pacientes</span>
+                    <img src="~/images/icons/patient_svg.svg" alt="Pacientes" class="me-2" style="height:1em;" />
+                    <span class="d-none d-sm-inline">Pacientes</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center" asp-controller="Prontuario" asp-action="IndexMedico">
+                    <img src="~/images/icons/prontuario_svg.svg" alt="Prontuários" class="me-2" style="height:1em;" />
+                    <span class="d-none d-sm-inline">Prontuários</span>
                 </a>
             </li>
         }
 
-        @if (roles.Contains("Administrador") )
+        @if (roles.Contains("Administrador"))
         {
             <li class="nav-item">
                 <a class="nav-link d-flex align-items-center" asp-controller="Patologia" asp-action="Index">
-                    <img src="~/images/icons/patoplogia_svg.svg" alt="Patologia" class="sidebar-icon" />
-                    <span>Patologias</span>
+                    <img src="~/images/icons/patoplogia_svg.svg" alt="Patologias" class="me-2" style="height:1em;" />
+                    <span class="d-none d-sm-inline">Patologias</span>
                 </a>
             </li>
-        }
-
-        @if (roles.Contains("Administrador"))
-        {
             <li class="nav-item">
                 <a class="nav-link d-flex align-items-center" asp-controller="Alergia" asp-action="Index">
-                    <img src="~/images/icons/alergia_svg.svg" alt="Alergia" class="sidebar-icon" />
-                    <span>Alergias</span>
+                    <img src="~/images/icons/alergia_svg.svg" alt="Alergias" class="me-2" style="height:1em;" />
+                    <span class="d-none d-sm-inline">Alergias</span>
                 </a>
             </li>
-        }
-
-        @if (roles.Contains("Administrador"))
-        {
             <li class="nav-item">
                 <a class="nav-link d-flex align-items-center" asp-controller="Medicamento" asp-action="Index">
-                    <img src="~/images/icons/medicamento_svg.svg" alt="Medicamento" class="sidebar-icon" />
-                    <span>Medicamentos</span>
+                    <img src="~/images/icons/medicamento_svg.svg" alt="Medicamentos" class="me-2" style="height:1em;" />
+                    <span class="d-none d-sm-inline">Medicamentos</span>
+                </a>
+            </li>
+            <!-- Novo item: Reabrir Prontuários -->
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center" asp-controller="Prontuario" asp-action="ReabrirIndex">
+                    <img src="~/images/icons/config_svg.svg" alt="Reabrir" class="me-2" style="height:1em;" />
+                    <span class="d-none d-sm-inline">Reabrir Prontuários</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center" asp-controller="Farmacia" asp-action="Index">
+                    <img src="~/images/icons/pharmacy_svg.svg" alt="Farmácia" class="me-2" style="height:1em;" />
+                    <span class="d-none d-sm-inline">Farmácia</span>
                 </a>
             </li>
         }
 
-        @if (roles.Contains("Administrador") || roles.Contains("Farmaceutico"))
+        @if (roles.Contains("Farmaceutico"))
         {
             <li class="nav-item">
-                <a class="nav-link d-flex align-items-center" asp-controller="Farmacia" asp-action="Index">
-                    <img src="~/images/icons/pharmacy_svg.svg" alt="Farmácia" class="sidebar-icon" />
-                    <span>Farmácia</span>
+                <a class="nav-link d-flex align-items-center" asp-controller="Home" asp-action="FarmaceuticoHome">
+                    <img src="~/images/icons/pharmacy_svg.svg" alt="Farmacêutico" class="me-2" style="height:1em;" />
+                    <span class="d-none d-sm-inline">Área do Farmacêutico</span>
+                </a>
+            </li>
+        }
+
+        @if (User.IsInRole("Paciente"))
+        {
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center" asp-controller="Prontuario" asp-action="IndexPaciente">
+                    <img src="~/images/icons/prontuario_svg.svg" alt="Prontuários" class="me-2" style="height:1em;" />
+                    <span class="d-none d-sm-inline">Meus Prontuários</span>
                 </a>
             </li>
         }

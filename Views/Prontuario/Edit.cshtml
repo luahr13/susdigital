@@ -1,0 +1,325 @@
+﻿@using projetoTP3_A2.Models.Enum
+@model projetoTP3_A2.Models.Prontuario
+
+@{
+    ViewData["Title"] = "Editar Prontuário";
+    Layout = "_Layout";
+}
+
+<style>
+    .btn-create {
+        background-color: #14A091;
+        color: #fff;
+        border: none;
+    }
+
+        .btn-create:hover {
+            background-color: #118072;
+            color: #fff;
+        }
+
+    .table-custom thead th {
+        background-color: #D0F5F2 !important;
+        color: #14A091 !important;
+        border-bottom: 2px solid #14A091;
+    }
+
+    .table-custom tbody td {
+        background-color: #E7FDFB !important;
+        color: #273240 !important;
+        vertical-align: middle;
+    }
+
+    .table-custom tbody tr:hover td {
+        background-color: #C4ECE9 !important;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <h2 class="mb-4 text-uppercase fw-bold" style="color:#14A091;">
+                @ViewData["Title"]
+            </h2>
+
+            <form asp-action="Edit" enctype="multipart/form-data">
+                <input type="hidden" asp-for="Id" />
+
+                <!-- Observações -->
+                <div class="mb-3">
+                    <label asp-for="Observacoes" class="form-label fw-bold">Observações</label>
+                    <textarea asp-for="Observacoes" class="form-control"></textarea>
+                </div>
+
+                <!-- Medicamentos -->
+                <h4 class="mt-4" style="color:#14A091;">Medicamentos</h4>
+                <button type="button" id="btn-add-form" class="btn btn-secondary mb-3">Adicionar Medicamentos</button>
+
+                <div id="medicamento-form" style="display:none;" class="card card-body bg-light mb-3">
+                    <label>Medicamento</label>
+                    <select id="medicamentoId" class="form-select" asp-items="ViewBag.MedicamentoId">
+                        <option value="">— Selecione —</option>
+                    </select>
+
+                    <label class="mt-2">Dosagem</label>
+                    <input type="text" id="dosagem" class="form-control" />
+
+                    <label class="mt-2">Frequência</label>
+                    <input type="text" id="frequencia" class="form-control" />
+
+                    <label class="mt-2">Observações</label>
+                    <input type="text" id="observacoesMed" class="form-control" />
+
+                    <button type="button" id="btn-incluir" class="btn btn-create mt-3">Incluir</button>
+                </div>
+
+                <div class="table-responsive shadow-sm rounded">
+                    <table class="table table-hover table-custom" id="medicamentos-table">
+                        <thead>
+                            <tr>
+                                <th>Medicamento</th>
+                                <th>Dosagem</th>
+                                <th>Frequência</th>
+                                <th>Observações</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Medicamentos.Count; i++)
+                            {
+                                <tr data-index="@i">
+                                    <td>
+                                        @Model.Medicamentos[i].Medicamento?.Nome
+                                        <input type="hidden" name="medicamentosSelecionados[@i]" value="@Model.Medicamentos[i].MedicamentoId" />
+                                    </td>
+                                    <td>
+                                        @Model.Medicamentos[i].Dosagem
+                                        <input type="hidden" name="dosagens[@i]" value="@Model.Medicamentos[i].Dosagem" />
+                                    </td>
+                                    <td>
+                                        @Model.Medicamentos[i].Frequencia
+                                        <input type="hidden" name="frequencias[@i]" value="@Model.Medicamentos[i].Frequencia" />
+                                    </td>
+                                    <td>
+                                        @Model.Medicamentos[i].Observacoes
+                                        <input type="hidden" name="observacoesMed[@i]" value="@Model.Medicamentos[i].Observacoes" />
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm btn-remover">Remover</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Exames -->
+                <h4 class="mt-4" style="color:#14A091;">Exames</h4>
+                <div class="table-responsive shadow-sm rounded">
+                    <table class="table table-hover table-custom" id="exames-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Observações</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Exames.Count; i++)
+                            {
+                                <tr data-index="@i">
+                                    <td>@Model.Exames[i].Nome</td>
+                                    <td>@Model.Exames[i].Observacoes</td>
+                                    <td>
+                                        @if (Model.Exames[i].Status == ExameStatus.Pendente)
+                                        {
+                                            <span class="badge bg-warning text-dark">Solicitado</span>
+                                        }
+                                        else if (Model.Exames[i].Status == ExameStatus.Realizado)
+                                        {
+                                            <span class="badge bg-info text-dark">Realizado</span>
+                                        }
+                                        else if (Model.Exames[i].Status == ExameStatus.Disponivel)
+                                        {
+                                            <span class="badge bg-success">Validado</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a asp-action="EditarExame" asp-route-id="@Model.Exames[i].Id" class="btn btn-primary btn-sm">Editar</a>
+                                        <a asp-action="RemoverExame" asp-route-id="@Model.Exames[i].Id" class="btn btn-danger btn-sm">Remover</a>
+                                        <a asp-action="AprovarExame" asp-route-id="@Model.Exames[i].Id" class="btn btn-success btn-sm">Aprovar</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Arquivos -->
+                <h4 class="mt-4" style="color:#14A091;">Arquivos</h4>
+                <div class="mb-3">
+                    <input type="file" id="fileInput" multiple class="form-control" />
+                </div>
+
+                <div class="table-responsive shadow-sm rounded">
+                    <table class="table table-hover table-custom" id="arquivos-table">
+                        <thead>
+                            <tr>
+                                <th>Arquivo</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Arquivos.Count; i++)
+                            {
+                                <tr data-index="@i">
+                                    <td>
+                                        <a href="~/@Model.Arquivos[i].Caminho" target="_blank">@Model.Arquivos[i].NomeArquivo</a>
+                                        <input type="hidden" name="arquivosExistentes[@i]" value="@Model.Arquivos[i].Id" />
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm btn-remover-arquivo">Remover</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Botões -->
+                <div class="mt-4">
+                    <input type="submit" value="Salvar" class="btn btn-create" />
+                    <a asp-action="IndexMedico" class="btn btn-secondary">Voltar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+
+    <script>
+        $(function () {
+            let index = $('#medicamentos-table tbody tr').length;
+            let arquivosSelecionados = [];
+
+            // --- Medicamentos ---
+            $('#btn-add-form').click(function () {
+                $('#medicamento-form').show();
+            });
+
+            $('#btn-incluir').click(function () {
+                const medId = $('#medicamentoId').val();
+                const medNome = $('#medicamentoId option:selected').text();
+                const dosagem = $('#dosagem').val();
+                const frequencia = $('#frequencia').val();
+                const observacoes = $('#observacoesMed').val();
+
+                if (!medId) {
+                    alert("Selecione um medicamento.");
+                    return;
+                }
+
+                $('#medicamentos-table tbody').append(`
+                    <tr data-index="${index}">
+                        <td>${medNome}
+                            <input type="hidden" name="medicamentosSelecionados[${index}]" value="${medId}" />
+                        </td>
+                        <td>${dosagem}
+                            <input type="hidden" name="dosagens[${index}]" value="${dosagem}" />
+                        </td>
+                        <td>${frequencia}
+                            <input type="hidden" name="frequencias[${index}]" value="${frequencia}" />
+                        </td>
+                        <td>${observacoes}
+                            <input type="hidden" name="observacoesMed[${index}]" value="${observacoes}" />
+                        </td>
+                        <td><button type="button" class="btn btn-danger btn-sm btn-remover">Remover</button></td>
+                    </tr>
+                `);
+
+                index++;
+                $('#medicamentoId').val('');
+                $('#dosagem').val('');
+                $('#frequencia').val('');
+                $('#observacoesMed').val('');
+                $('#medicamento-form').hide();
+            });
+
+            $(document).on('click', '.btn-remover', function () {
+                $(this).closest('tr').remove();
+            });
+
+            // --- Arquivos ---
+            $('#fileInput').on('change', function (e) {
+                const files = Array.from(e.target.files);
+                arquivosSelecionados = arquivosSelecionados.concat(files);
+                renderTabelaArquivos();
+            });
+
+            function renderTabelaArquivos() {
+                const tbody = $('#arquivos-table tbody');
+                tbody.find('tr[data-index^="novo-"]').remove();
+
+                arquivosSelecionados.forEach((file, idx) => {
+                    tbody.append(`
+                        <tr data-index="novo-${idx}">
+                            <td>${file.name}</td>
+                            <td><button type="button" class="btn btn-danger btn-sm btn-remover-arquivo">Remover</button></td>
+                        </tr>
+                    `);
+                });
+            }
+
+            $(document).on('click', '.btn-remover-arquivo', function () {
+                const idx = $(this).closest('tr').data('index');
+                if (String(idx).startsWith("novo-")) {
+                    const pos = parseInt(idx.split('-')[1]);
+                    arquivosSelecionados.splice(pos, 1);
+                    renderTabelaArquivos();
+                } else {
+                    $(this).closest('tr').remove();
+                }
+            });
+
+            // Antes de enviar o form, recria input com apenas os arquivos novos restantes
+            $('form').on('submit', function () {
+                const dataTransfer = new DataTransfer();
+                arquivosSelecionados.forEach(file => dataTransfer.items.add(file));
+
+                const newInput = document.createElement('input');
+                newInput.type = 'file';
+                newInput.name = 'arquivos';
+                newInput.multiple = true;
+                newInput.style.display = 'none';
+                newInput.files = dataTransfer.files;
+
+                this.appendChild(newInput);
+            });
+
+            // --- Exames ---
+            $(document).on('click', '.btn-aprovar-exame', function () {
+                const exameId = $(this).data('id');
+                // chamada AJAX para aprovar exame
+                $.post('/Prontuario/AprovarExame', { id: exameId }, function () {
+                    location.reload();
+                });
+            });
+
+            $(document).on('click', '.btn-remover-exame', function () {
+                const exameId = $(this).data('id');
+                // chamada AJAX para remover exame
+                $.post('/Prontuario/RemoverExame', { id: exameId }, function () {
+                    location.reload();
+                });
+            });
+
+            $(document).on('click', '.btn-editar-exame', function () {
+                const exameId = $(this).data('id');
+                window.location.href = '/Prontuario/EditarExame/' + exameId;
+            });
+        });
+    </script>
+}

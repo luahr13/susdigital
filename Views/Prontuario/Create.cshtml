@@ -1,0 +1,314 @@
+﻿@model projetoTP3_A2.Models.Prontuario
+
+@{
+    ViewData["Title"] = "Criar Prontuário";
+    Layout = "_Layout";
+}
+
+<style>
+    .btn-create {
+        background-color: #14A091;
+        color: #fff;
+        border: none;
+    }
+
+        .btn-create:hover {
+            background-color: #118072;
+            color: #fff;
+        }
+
+    .table-custom thead th {
+        background-color: #D0F5F2 !important;
+        color: #14A091 !important;
+        border-bottom: 2px solid #14A091;
+    }
+
+    .table-custom tbody td {
+        background-color: #E7FDFB !important;
+        color: #273240 !important;
+        vertical-align: middle;
+    }
+
+    .table-custom tbody tr:hover td {
+        background-color: #C4ECE9 !important;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <h2 class="mb-4 text-uppercase fw-bold" style="color:#14A091;">
+                @ViewData["Title"]
+            </h2>
+
+            <form asp-action="Create" enctype="multipart/form-data">
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                <!-- Paciente -->
+                <div class="mb-3">
+                    <label asp-for="PacienteId" class="form-label fw-bold">Paciente</label>
+                    <select asp-for="PacienteId" class="form-select" asp-items="ViewBag.PacienteId" id="PacienteId"></select>
+                    <span asp-validation-for="PacienteId" class="text-danger"></span>
+                </div>
+
+                <!-- Observações -->
+                <div class="mb-3">
+                    <label asp-for="Observacoes" class="form-label fw-bold">Observações</label>
+                    <textarea asp-for="Observacoes" class="form-control"></textarea>
+                    <span asp-validation-for="Observacoes" class="text-danger"></span>
+                </div>
+
+                <!-- Medicamentos -->
+                <h4 class="mt-4" style="color:#14A091;">Medicamentos</h4>
+                <button type="button" id="btn-add-form" class="btn btn-secondary mb-3">Adicionar Medicamentos</button>
+
+                <div id="medicamento-form" style="display:none;" class="card card-body bg-light mb-3">
+                    <label>Medicamento</label>
+                    <select id="medicamentoId" class="form-select" asp-items="ViewBag.MedicamentoId">
+                        <option value="">— Selecione —</option>
+                    </select>
+
+                    <label class="mt-2">Dosagem</label>
+                    <input type="text" id="dosagem" class="form-control" />
+
+                    <label class="mt-2">Frequência</label>
+                    <input type="text" id="frequencia" class="form-control" />
+
+                    <label class="mt-2">Observações</label>
+                    <input type="text" id="observacoesMed" class="form-control" />
+
+                    <button type="button" id="btn-incluir" class="btn btn-create mt-3">Incluir</button>
+                </div>
+
+                <div class="table-responsive shadow-sm rounded">
+                    <table class="table table-hover table-custom" id="medicamentos-table">
+                        <thead>
+                            <tr>
+                                <th>Medicamento</th>
+                                <th>Dosagem</th>
+                                <th>Frequência</th>
+                                <th>Observações</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <!-- Exames -->
+                <h4 class="mt-4" style="color:#14A091;">Exames</h4>
+                <button type="button" id="btn-add-exame" class="btn btn-secondary mb-3">Adicionar Exame</button>
+
+                <div id="exame-form" style="display:none;" class="card card-body bg-light mb-3">
+                    <label>Nome do Exame</label>
+                    <input type="text" id="nomeExame" class="form-control" />
+
+                    <label class="mt-2">Observações</label>
+                    <input type="text" id="observacoesExame" class="form-control" />
+
+                    <button type="button" id="btn-incluir-exame" class="btn btn-create mt-3">Incluir</button>
+                </div>
+
+                <div class="table-responsive shadow-sm rounded">
+                    <table class="table table-hover table-custom" id="exames-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Observações</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <!-- Arquivos -->
+                <h4 class="mt-4" style="color:#14A091;">Arquivos</h4>
+                <div class="mb-3">
+                    <input type="file" id="fileInput" multiple class="form-control" />
+                </div>
+
+                <div class="table-responsive shadow-sm rounded">
+                    <table class="table table-hover table-custom" id="arquivos-table">
+                        <thead>
+                            <tr>
+                                <th>Arquivo</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <!-- Botões -->
+                <div class="mt-4">
+                    <input type="submit" value="Criar" class="btn btn-create" />
+                    <a asp-action="IndexMedico" class="btn btn-secondary">Voltar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script>
+        $(function () {
+            let index = 0;                  // índice para medicamentos
+            let arquivosSelecionados = [];  // lista de arquivos
+            let exameIndex = 0;             // índice para exames
+
+            // -----------------------------
+            // Medicamentos
+            // -----------------------------
+            $('#btn-add-form').click(function () {
+                $('#medicamento-form').show();
+            });
+
+            $('#btn-incluir').click(function () {
+                const medId = $('#medicamentoId').val();
+                const medNome = $('#medicamentoId option:selected').text();
+                const dosagem = $('#dosagem').val();
+                const frequencia = $('#frequencia').val();
+                const observacoes = $('#observacoesMed').val();
+
+                if (!medId) {
+                    alert("Selecione um medicamento.");
+                    return;
+                }
+
+                $('#medicamentos-table tbody').append(`
+                    <tr data-index="${index}">
+                        <td>
+                            ${medNome}
+                            <input type="hidden" name="medicamentosSelecionados[${index}]" value="${medId}" />
+                        </td>
+                        <td>
+                            ${dosagem}
+                            <input type="hidden" name="dosagens[${index}]" value="${dosagem}" />
+                        </td>
+                        <td>
+                            ${frequencia}
+                            <input type="hidden" name="frequencias[${index}]" value="${frequencia}" />
+                        </td>
+                        <td>
+                            ${observacoes}
+                            <input type="hidden" name="observacoesMed[${index}]" value="${observacoes}" />
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm btn-remover">Remover</button>
+                        </td>
+                    </tr>
+                `);
+
+                index++;
+                $('#medicamentoId').val('');
+                $('#dosagem').val('');
+                $('#frequencia').val('');
+                $('#observacoesMed').val('');
+                $('#medicamento-form').hide();
+            });
+
+            $(document).on('click', '.btn-remover', function () {
+                $(this).closest('tr').remove();
+            });
+
+            // -----------------------------
+            // Exames
+            // -----------------------------
+            $('#btn-add-exame').click(function () {
+                $('#exame-form').show();
+            });
+
+            $('#btn-incluir-exame').click(function () {
+                const nome = $('#nomeExame').val();
+                const obs = $('#observacoesExame').val();
+
+                if (!nome) {
+                    alert("Informe o nome do exame.");
+                    return;
+                }
+
+                $('#exames-table tbody').append(`
+                    <tr data-index="${exameIndex}">
+                        <td>
+                            ${nome}
+                            <input type="hidden" name="nomesExame[${exameIndex}]" value="${nome}" />
+                        </td>
+                        <td>
+                            ${obs}
+                            <input type="hidden" name="observacoesExame[${exameIndex}]" value="${obs}" />
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm btn-remover-exame">Remover</button>
+                        </td>
+                    </tr>
+                `);
+
+                exameIndex++;
+                $('#nomeExame').val('');
+                $('#observacoesExame').val('');
+                $('#exame-form').hide();
+            });
+
+            $(document).on('click', '.btn-remover-exame', function () {
+                $(this).closest('tr').remove();
+            });
+
+            // -----------------------------
+            // Arquivos
+            // -----------------------------
+            $('#fileInput').on('change', function (e) {
+                const files = Array.from(e.target.files);
+                arquivosSelecionados = arquivosSelecionados.concat(files);
+                renderTabelaArquivos();
+            });
+
+            function renderTabelaArquivos() {
+                const tbody = $('#arquivos-table tbody');
+                tbody.empty();
+
+                arquivosSelecionados.forEach((file, index) => {
+                    tbody.append(`
+                        <tr data-index="${index}">
+                            <td>${file.name}</td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm btn-remover-arquivo">Remover</button>
+                            </td>
+                        </tr>
+                    `);
+                });
+            }
+
+            $(document).on('click', '.btn-remover-arquivo', function () {
+                const idx = $(this).closest('tr').data('index');
+                arquivosSelecionados.splice(idx, 1);
+                renderTabelaArquivos();
+            });
+
+            // -----------------------------
+            // Antes de enviar o form
+            // -----------------------------
+            $('form').on('submit', function () {
+                const dataTransfer = new DataTransfer();
+
+                // adiciona os arquivos restantes
+                arquivosSelecionados.forEach(file => dataTransfer.items.add(file));
+
+                // cria input escondido com os arquivos
+                const newInput = document.createElement('input');
+                newInput.type = 'file';
+                newInput.name = 'arquivos';
+                newInput.multiple = true;
+                newInput.style.display = 'none';
+                newInput.files = dataTransfer.files;
+
+                this.appendChild(newInput);
+            });
+        });
+    </script>
+}

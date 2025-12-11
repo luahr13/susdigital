@@ -3,8 +3,7 @@
     public enum PrescricaoStatus
     {
         Pendente = 1,
-        Realizado = 2,
-        Liquidado = 3,
-        Cancelado = 4
+        Liquidado = 2,
+        Cancelado = 3
     }
 }

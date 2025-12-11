@@ -1,12 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Página Inicial";
-    Layout = "_Layout"; // usa o layout padrão com navbar e rodapé
 }
 <div class="container-fluid">
-    <!-- Coluna do menu lateral -->
-    <div class="col-md-2">
-        <partial name="_Sidebar" />
-    </div>
     <div class="container mt-4">
         <h1 class="text-primary">Bem-vindo, @User.Identity.Name!</h1>
         <p class="lead">Você está logado no sistema de saúde.</p>

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using projetoTP3_A2.Data;
 using projetoTP3_A2.Models;
 using projetoTP3_A2.Models.Enum;
 using System.Linq;
@@ -13,10 +14,12 @@ namespace projetoTP3_A2.Controllers
     public class MedicoController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _context;
 
-        public MedicoController(UserManager<ApplicationUser> userManager)
+        public MedicoController(UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
             _userManager = userManager;
+            _context = context;
         }
 
         // GET: /Medico/Pacientes?query=joao
@@ -55,6 +58,25 @@ namespace projetoTP3_A2.Controllers
 
             // TODO: carregar histórico de prontuários e exibir
             return View(paciente); // por enquanto, pode mostrar dados básicos
+        }
+
+        // GET: /Medico/VerProntuario/{pacienteId}
+        public async Task<IActionResult> VerProntuario(Guid pacienteId)
+        {
+            var paciente = await _userManager.FindByIdAsync(pacienteId.ToString());
+            if (paciente == null || paciente.Perfil != Perfis.Paciente)
+                return NotFound();
+
+            var prontuarios = await _context.Prontuario
+                .Where(p => p.PacienteId == pacienteId)
+                .OrderByDescending(p => p.CriadoEm)
+                .ToListAsync();
+
+            // Sempre envia os dados do paciente para a view
+            ViewBag.PacienteNome = paciente.Nome;
+            ViewBag.PacienteId = paciente.Id;
+
+            return View("ListaProntuarios", prontuarios);
         }
     }
 

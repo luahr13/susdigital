@@ -1,7 +1,6 @@
 ﻿@model IEnumerable<projetoTP3_A2.Controllers.PacienteListItem>
 @{
     ViewData["Title"] = "Pacientes";
-    Layout = "_Layout";
 }
 
 <style>
@@ -10,76 +9,105 @@
         color: #fff;
         border: none;
     }
-    .btn-pesquisar:hover {
-        background-color: #118072;
-        color: #fff;
-    }
+
+        .btn-pesquisar:hover {
+            background-color: #118072;
+            color: #fff;
+        }
+
     .table-custom thead th {
         background-color: #D0F5F2 !important;
         color: #14A091 !important;
+        border-bottom: 2px solid #14A091;
     }
+
     .table-custom tbody td {
         background-color: #E7FDFB !important;
-        color: #14A091 !important;
+        color: #273240 !important;
+        vertical-align: middle;
     }
+
     .table-custom tbody tr:hover td {
         background-color: #C4ECE9 !important;
-        color: #14A091 !important;
+    }
+
+    .btn-details {
+        background-color: #14A091;
+        color: #fff;
+        border: none;
+    }
+
+        .btn-details:hover {
+            background-color: #118072;
+            color: #fff;
+        }
+
+    .pagination .page-link {
+        color: #14A091;
+        border-color: #14A091;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #14A091;
+        border-color: #14A091;
+        color: #fff;
     }
 </style>
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-2">
-            <partial name="_Sidebar" />
-        </div>
-        <div class="col-md-10">
-            <h2 style="color:#14A091;" class="mb-4">Pacientes</h2>
+        <div class="col-lg-10 mx-auto">
+            <h2 class="mb-4 text-uppercase fw-bold" style="color:#14A091;">Pacientes</h2>
 
-            <form method="get" class="d-flex mb-3">
-                <input type="text" name="query" value="@Context.Request.Query["query"]"
-                       class="form-control me-2" placeholder="Buscar por nome..." />
-
-                <select name="pageSize" class="form-select me-2" style="width:120px;" onchange="this.form.submit()">
-                    <option value="10" selected="@(ViewBag.PageSize == 10)">10</option>
-                    <option value="20" selected="@(ViewBag.PageSize == 20)">20</option>
-                    <option value="50" selected="@(ViewBag.PageSize == 50)">50</option>
-                </select>
-
-                <button type="submit" class="btn btn-sm btn-pesquisar">Pesquisar</button>
+            <form method="get" class="row g-2 mb-4 align-items-center">
+                <div class="col-md-6">
+                    <input type="text" name="query" value="@Context.Request.Query["query"]"
+                           class="form-control" placeholder="Buscar por nome..." />
+                </div>
+                <div class="col-md-2">
+                    <select name="pageSize" class="form-select" onchange="this.form.submit()">
+                        <option value="10" selected="@(ViewBag.PageSize == 10)">10</option>
+                        <option value="20" selected="@(ViewBag.PageSize == 20)">20</option>
+                        <option value="50" selected="@(ViewBag.PageSize == 50)">50</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-pesquisar w-100">Pesquisar</button>
+                </div>
             </form>
 
-            <table class="table table-hover border rounded shadow-sm table-custom">
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Email</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var p in Model)
-                    {
+            <div class="table-responsive shadow-sm rounded">
+                <table class="table table-hover table-custom">
+                    <thead class="text-center">
                         <tr>
-                            <td>@p.Nome</td>
-                            <td>@p.Email</td>
-                            <td>
-                                <a asp-controller="Medico" asp-action="Prontuario" asp-route-id="@p.Id"
-                                   class="btn btn-sm btn-details">Ver prontuário</a>
-                            </td>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Ações</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var p in Model)
+                        {
+                            <tr>
+                                <td>@p.Nome</td>
+                                <td>@p.Email</td>
+                                <td>
+                                    <a asp-controller="Medico" asp-action="VerProntuario" asp-route-pacienteId="@p.Id"
+                                       class="btn btn-sm btn-details">Ver prontuário</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
 
             <!-- Paginação -->
-            <nav>
-                <ul class="pagination">
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
                     @{
                         int totalPages = (int)Math.Ceiling((double)ViewBag.TotalCount / ViewBag.PageSize);
                         int currentPage = ViewBag.Page;
 
-                        // Botão anterior
                         if (currentPage > 1)
                         {
                             <li class="page-item">
@@ -90,7 +118,6 @@
                             </li>
                         }
 
-                        // Números
                         for (int i = 1; i <= totalPages; i++)
                         {
                             <li class="page-item @(i == currentPage ? "active" : "")">
@@ -101,7 +128,6 @@
                             </li>
                         }
 
-                        // Botão próximo
                         if (currentPage < totalPages)
                         {
                             <li class="page-item">

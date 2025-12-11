@@ -1,0 +1,156 @@
+﻿@model projetoTP3_A2.Models.Prontuario
+
+@{
+    ViewData["Title"] = "Excluir Prontuário";
+    Layout = "_Layout";
+}
+
+<style>
+    .btn-create {
+        background-color: #14A091;
+        color: #fff;
+        border: none;
+    }
+
+        .btn-create:hover {
+            background-color: #118072;
+            color: #fff;
+        }
+
+    .table-custom thead th {
+        background-color: #D0F5F2 !important;
+        color: #14A091 !important;
+        border-bottom: 2px solid #14A091;
+    }
+
+    .table-custom tbody td {
+        background-color: #E7FDFB !important;
+        color: #273240 !important;
+        vertical-align: middle;
+    }
+
+    .table-custom tbody tr:hover td {
+        background-color: #C4ECE9 !important;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <h2 class="mb-4 text-uppercase fw-bold" style="color:#14A091;">
+                @ViewData["Title"]
+            </h2>
+
+            @if (TempData["Erro"] != null)
+            {
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    @TempData["Erro"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                </div>
+            }
+
+            <div class="card shadow-sm mb-4 border-danger">
+                <div class="card-header bg-danger text-white fw-bold">
+                    Atenção
+                </div>
+                <div class="card-body">
+                    <h4 class="text-danger">Tem certeza que deseja excluir este prontuário?</h4>
+                    <p>Essa ação é <strong>irreversível</strong> e removerá todos os dados associados, incluindo exames, medicamentos e arquivos.</p>
+                </div>
+            </div>
+
+            <!-- Informações principais -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header" style="background-color:#D0F5F2; color:#14A091;">
+                    Informações do Prontuário
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-2 fw-bold">Paciente</dt>
+                        <dd class="col-sm-10">@Model.Paciente?.Nome (@Model.Paciente?.Email)</dd>
+
+                        <dt class="col-sm-2 fw-bold">Médico</dt>
+                        <dd class="col-sm-10">@Model.Medico?.Nome (@Model.Medico?.Email)</dd>
+
+                        <dt class="col-sm-2 fw-bold">Criado em</dt>
+                        <dd class="col-sm-10">@Model.CriadoEm.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                        <dt class="col-sm-2 fw-bold">Status</dt>
+                        <dd class="col-sm-10">@Model.Status</dd>
+
+                        <dt class="col-sm-2 fw-bold">Observações</dt>
+                        <dd class="col-sm-10">@Model.Observacoes</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <!-- Exames -->
+            @if (Model.Exames != null && Model.Exames.Any())
+            {
+                <h5 style="color:#14A091;">Exames associados</h5>
+                <div class="table-responsive shadow-sm rounded mb-4">
+                    <table class="table table-hover table-custom">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Status</th>
+                                <th>Solicitado em</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var exame in Model.Exames)
+                            {
+                                <tr>
+                                    <td>@exame.Nome</td>
+                                    <td>@exame.Status</td>
+                                    <td>@exame.SolicitadoEm.ToString("dd/MM/yyyy HH:mm")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            <!-- Medicamentos -->
+            @if (Model.Medicamentos != null && Model.Medicamentos.Any())
+            {
+                <h5 style="color:#14A091;">Medicamentos associados</h5>
+                <div class="table-responsive shadow-sm rounded mb-4">
+                    <table class="table table-hover table-custom">
+                        <thead>
+                            <tr>
+                                <th>Medicamento</th>
+                                <th>Dosagem</th>
+                                <th>Frequência</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var med in Model.Medicamentos)
+                            {
+                                <tr>
+                                    <td>@med.Medicamento?.Nome</td>
+                                    <td>@med.Dosagem</td>
+                                    <td>@med.Frequencia</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            <!-- Botões -->
+            <form asp-action="Delete" class="mt-4">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn btn-danger fw-bold">Excluir</button>
+                @if (User.IsInRole("Medico"))
+                {
+                    <a asp-action="IndexMedico" class="btn btn-secondary">Cancelar</a>
+                }
+                else if (User.IsInRole("Paciente"))
+                {
+                    <a asp-action="IndexPaciente" class="btn btn-secondary">Cancelar</a>
+                }
+            </form>
+        </div>
+    </div>
+</div>
