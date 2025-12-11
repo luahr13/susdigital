@@ -6,7 +6,6 @@
 
 <div class="container-fluid">
     <div class="row">
-        <!-- Conteúdo principal -->
         <div class="col-md-10">
             <h2 class="mb-4" style="color:#14A091;">Nova Farmácia</h2>
 
@@ -22,27 +21,27 @@
                             <span asp-validation-for="Nome" class="text-danger"></span>
                         </div>
 
+                        <!-- CEP -->
+                        <div class="mb-3">
+                            <label for="cep" class="form-label">CEP</label>
+                            <input id="cep" type="text" maxlength="8" class="form-control" placeholder="Digite o CEP" />
+                            <div id="cepError" class="text-danger mt-1"></div>
+                        </div>
+
                         <!-- Endereço -->
                         <div class="mb-3">
                             <label asp-for="Endereco" class="form-label">Endereço</label>
-                            <input asp-for="Endereco" class="form-control" />
+                            <input asp-for="Endereco" class="form-control" id="endereco" />
                             <span asp-validation-for="Endereco" class="text-danger"></span>
                         </div>
 
                         <div class="d-flex justify-content-between">
-                            <a asp-action="Index" class="btn btn-outline-secondary">
-                                Voltar
-                            </a>
-
-                            <button type="submit" class="btn" style="background-color:#14A091;color:white;">
-                                Salvar
-                            </button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+                            <button type="submit" class="btn" style="background-color:#14A091;color:white;">Salvar</button>
                         </div>
-
                     </form>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
@@ -51,4 +50,35 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        document.getElementById("cep").addEventListener("blur", async function () {
+            const cep = this.value.trim();
+            const cepError = document.getElementById("cepError");
+            const enderecoInput = document.getElementById("endereco");
+
+            cepError.textContent = "";
+            enderecoInput.value = "";
+
+            if (cep.length === 8 && /^[0-9]+$/.test(cep)) {
+                try {
+                    const response = await fetch(`/Farmacia/BuscarEndereco?cep=${cep}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data && !data.erro) {
+                            enderecoInput.value = `${data.logradouro}, ${data.bairro}, ${data.localidade} - ${data.uf}`;
+                        } else {
+                            cepError.textContent = "CEP não encontrado.";
+                        }
+                    } else {
+                        cepError.textContent = "Erro ao consultar CEP.";
+                    }
+                } catch (err) {
+                    cepError.textContent = "Falha na consulta do CEP.";
+                }
+            } else {
+                cepError.textContent = "CEP inválido. Deve conter 8 dígitos numéricos.";
+            }
+        });
+    </script>
 }

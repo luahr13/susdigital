@@ -15,16 +15,36 @@ namespace projetoTP3_A2.Controllers
     public class FarmaciaController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ViaCepService _viaCepService; // <-- adiciona o serviço
 
-        public FarmaciaController(ApplicationDbContext context)
+
+        public FarmaciaController(ApplicationDbContext context, ViaCepService viaCepService)
         {
             _context = context;
+            _viaCepService = viaCepService; // <-- injeta aqui
         }
 
         // GET: Farmacia
         public async Task<IActionResult> Index()
         {
             return View(await _context.Farmacia.ToListAsync());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> BuscarEndereco(string cep)
+        {
+            try
+            {
+                var endereco = await _viaCepService.ConsultarCepAsync(cep);
+                if (endereco.Erro)
+                    return NotFound("CEP não encontrado.");
+
+                return Ok(endereco);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // GET: Farmacia/Details/5

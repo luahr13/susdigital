@@ -51,6 +51,11 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
+// --------------------------------------------------------
+// SERVIÇO DE CONSULTA DE CEP (ViaCEP)
+// --------------------------------------------------------
+builder.Services.AddHttpClient<ViaCepService>();
+
 var app = builder.Build();
 
 // --------------------------------------------------------

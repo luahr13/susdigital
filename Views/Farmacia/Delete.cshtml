@@ -6,35 +6,50 @@
 
 <div class="container-fluid">
     <div class="row">
-        <!-- Conteúdo principal -->
         <div class="col-md-10">
-            <h2 class="mb-4" style="color:#6c757d;">Excluir Farmácia</h2>
+            <h2 class="mb-4 text-secondary">
+                <i class="bi bi-trash me-2"></i> Excluir Farmácia
+            </h2>
 
             <div class="card shadow-sm border-0">
                 <div class="card-body">
-                    <h4 class="mb-3" style="color:#6c757d;">Tem certeza que deseja excluir esta farmácia?</h4>
+                    <h4 class="mb-3 text-muted">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        Tem certeza que deseja excluir esta farmácia?
+                    </h4>
 
                     <dl class="row">
-
                         <dt class="col-sm-3 text-muted">Nome</dt>
                         <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
 
                         <dt class="col-sm-3 text-muted">Endereço</dt>
-                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Endereco)</dd>
-
+                        <dd class="col-sm-9">
+                            <span class="badge bg-info text-dark">
+                                <i class="bi bi-geo-alt me-1"></i>
+                                @Html.DisplayFor(model => model.Endereco)
+                            </span>
+                        </dd>
                     </dl>
+
+                    <div class="alert alert-warning mt-3">
+                        <i class="bi bi-info-circle me-1"></i>
+                        O endereço foi preenchido automaticamente via consulta de CEP (API ViaCEP).
+                    </div>
 
                     <form asp-action="Delete" method="post" class="mt-4">
                         <input type="hidden" asp-for="Id" />
 
                         <div class="d-flex justify-content-between">
-                            <input type="submit" value="Excluir" class="btn btn-danger" />
-                            <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash me-1"></i> Excluir
+                            </button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-1"></i> Voltar
+                            </a>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
